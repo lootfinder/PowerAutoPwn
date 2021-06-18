@@ -1,13 +1,15 @@
+Display.SelectFile Title: $'''Select A CSV with Amazon S3 Buckets''' InitialDirectory: $'''C:\\''' FileFilter: $'''*.csv''' IsTopMost: False CheckIfFileExists: True SelectedFile=> SelectedFile ButtonPressed=> ButtonPressed2
+Display.ShowMessageWithTimeout Title: $'''Select a Folder''' Message: $'''On the next dialog, select a folder for output files to be placed into.
+''' Icon: Display.Icon.Information Buttons: Display.Buttons.OK DefaultButton: Display.DefaultButton.Button1 IsTopMost: False Timeout: 5 ButtonPressed=> ButtonPressed3
+Display.SelectFolder Description: $'''Now Choose An Output Folder''' InitialDirectory: $'''C:\\''' IsTopMost: False SelectedFolder=> SelectedFolder ButtonPressed=> ButtonPressed
 Variables.CreateNewList List=> ErrorList
-IF (File.Exists File: $'''C:\\Users\\d\\Documents\\s3 url.csv''') THEN
-    File.ReadCSV CSVFile: $'''C:\\Users\\d\\Documents\\s3 url.csv''' Encoding: File.CSVEncoding.UTF8 TrimFields: True FirstLineContainsColumnNames: False ColumnsSeparator: File.CSVColumnsSeparator.Comma CSVTable=> CSVTable
+IF (File.Exists File: SelectedFile) THEN
+    File.ReadCSV CSVFile: SelectedFile Encoding: File.CSVEncoding.UTF8 TrimFields: True FirstLineContainsColumnNames: False ColumnsSeparator: File.CSVColumnsSeparator.Comma CSVTable=> CSVTable
     LOOP FOREACH CurrentItem IN CSVTable
-        Web.DownloadToFolder Url: $'''https://%CurrentItem%''' DestinationFolder: $'''C:\\Users\\d\\Documents\\xmloutput''' ConnectionTimeout: 30 FollowRedirection: True ClearCookies: False UserAgent: $'''Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.21) Gecko/20100312 Firefox/3.6''' Encoding: Web.Encoding.AutoDetect AcceptUntrustedCertificates: True DownloadedFile=> DownloadedFile
+        Web.DownloadToFolder Url: CurrentItem DestinationFolder: SelectedFolder ConnectionTimeout: 30 FollowRedirection: True ClearCookies: False UserAgent: $'''Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.21) Gecko/20100312 Firefox/3.6''' Encoding: Web.Encoding.AutoDetect AcceptUntrustedCertificates: True DownloadedFile=> DownloadedFile
                 ON ERROR DownloadFromWebError
-                    SET NewVar TO $'''%CurrentItem% + error'''
-                ON ERROR
-        
+                    SET singleError TO CurrentItem
                 END
-        Variables.AddItemToList Item: NewVar List: ErrorList NewList=> ErrorList
+        Variables.AddItemToList Item: singleError List: ErrorList NewList=> ErrorList
     END
 END

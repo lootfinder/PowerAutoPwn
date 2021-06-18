@@ -1,0 +1,13 @@
+Variables.CreateNewList List=> ErrorList
+IF (File.Exists File: $'''C:\\Users\\d\\Documents\\s3 url.csv''') THEN
+    File.ReadCSV CSVFile: $'''C:\\Users\\d\\Documents\\s3 url.csv''' Encoding: File.CSVEncoding.UTF8 TrimFields: True FirstLineContainsColumnNames: False ColumnsSeparator: File.CSVColumnsSeparator.Comma CSVTable=> CSVTable
+    LOOP FOREACH CurrentItem IN CSVTable
+        Web.DownloadToFolder Url: $'''https://%CurrentItem%''' DestinationFolder: $'''C:\\Users\\d\\Documents\\xmloutput''' ConnectionTimeout: 30 FollowRedirection: True ClearCookies: False UserAgent: $'''Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.21) Gecko/20100312 Firefox/3.6''' Encoding: Web.Encoding.AutoDetect AcceptUntrustedCertificates: True DownloadedFile=> DownloadedFile
+                ON ERROR DownloadFromWebError
+                    SET NewVar TO $'''%CurrentItem% + error'''
+                ON ERROR
+        
+                END
+        Variables.AddItemToList Item: NewVar List: ErrorList NewList=> ErrorList
+    END
+END

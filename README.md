@@ -2,7 +2,8 @@
 Testing Microsoft Power Automate as an offensive security tool.
 
 Just like usual, I was sitting around on the computer minding my own business when suddenly I noticed a tool called "Microsoft Power Automate" on my computer.  It must come bundled with Office 365, which I had recently purchased.
-I am a huge fan of lowcode/nocode because I think it makes coding more accessible to people.  
+I am a huge fan of lowcode/nocode because I think it makes coding more accessible to people.  In my old life, I was a certified Dynamics 365 consultant who spent a lot of time watching the Power Platform evolve into what it is today.  This tool is super impressive and the teams at Microsoft who pulled this off should be really proud of themselves.  Now, unfortunately, I will make it do things it was never designed for :)
+
 
 To use any of the scripts I put here, just copy the text and paste it into your Power Automate "flow".  After pasting, you should get a nice visual representation of what the code does.
 
